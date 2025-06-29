@@ -1,0 +1,20 @@
+@using reestr.Services
+@inject MudDialogInstance MudDialog
+@code {
+    [Parameter] public List<ReestrEntry> Entries { get; set; } = new();
+    private void Select(ReestrEntry entry) => MudDialog.Close(DialogResult.Ok(entry));
+}
+
+<MudDialog>
+    <MudDialogTitle>Выберите дату</MudDialogTitle>
+    <MudDialogContent>
+        <MudList T="ReestrEntry">
+            @foreach (var item in Entries)
+            {
+                <MudListItem Style="cursor:pointer" @onclick="() => Select(item)">
+                    @item.OrderWithDate
+                </MudListItem>
+            }
+        </MudList>
+    </MudDialogContent>
+</MudDialog>
