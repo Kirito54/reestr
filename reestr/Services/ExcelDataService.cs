@@ -13,6 +13,17 @@ public class ExcelDataService
     public void LoadFromFile(string path)
     {
         using var wb = new XLWorkbook(path);
+        LoadFromWorkbook(wb);
+    }
+
+    public void LoadFromStream(Stream stream)
+    {
+        using var wb = new XLWorkbook(stream);
+        LoadFromWorkbook(wb);
+    }
+
+    private void LoadFromWorkbook(XLWorkbook wb)
+    {
         var ws = wb.Worksheets.First();
         foreach (var row in ws.RowsUsed().Skip(1))
         {
