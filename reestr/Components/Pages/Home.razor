@@ -1,7 +1,14 @@
-﻿@page "/"
+@page "/"
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Общая информация</PageTitle>
 
-<h1>Hello, world!</h1>
-
-Welcome to your new app.
+<MudCard Class="mx-auto my-4" Style="max-width:600px;">
+    <MudCardContent>
+        <MudText Typo="Typo.h5" Class="mb-2">Добро пожаловать!</MudText>
+        <MudText>Это приложение позволяет искать информацию по распоряжениям.</MudText>
+        <MudText>Файл Excel необходимо загрузить через
+            <MudLink Href="https://t.me/examplebot" Target="_blank">Telegram-бота</MudLink>.
+        </MudText>
+        <MudText Class="mt-2">После загрузки файла вы сможете найти номер очереди по номеру распоряжения и МФЦ.</MudText>
+    </MudCardContent>
+</MudCard>

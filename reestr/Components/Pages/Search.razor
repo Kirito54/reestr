@@ -1,0 +1,57 @@
+@page "/search"
+@using reestr.Services
+@inject ExcelDataService ExcelService
+@inject IDialogService DialogService
+
+<PageTitle>Поиск информации</PageTitle>
+
+<MudCard Class="mx-auto my-4" Style="max-width:600px;">
+    <MudCardContent>
+        <MudText Typo="Typo.h5" Class="mb-2">Поиск информации</MudText>
+        <MudTextField @bind-Value="OrderNumber" Label="Номер распоряжения" Variant="Variant.Outlined" Class="mb-2" />
+        <MudTextField @bind-Value="MfcNumber" Label="Номер МФЦ" Variant="Variant.Outlined" Class="mb-2" />
+        <MudButton OnClick="PerformSearch" Color="Color.Primary" Variant="Variant.Filled">Найти</MudButton>
+        @if (!string.IsNullOrEmpty(Result))
+        {
+            <MudText Class="mt-2">Результат: @Result</MudText>
+        }
+    </MudCardContent>
+</MudCard>
+
+@code {
+    private string? OrderNumber;
+    private string? MfcNumber;
+    private string? Result;
+
+    private async Task PerformSearch()
+    {
+        Result = string.Empty;
+        if (string.IsNullOrWhiteSpace(OrderNumber))
+            return;
+
+        if (string.IsNullOrWhiteSpace(MfcNumber))
+        {
+            var matches = ExcelService.FindByOrder(OrderNumber).ToList();
+            if (matches.Count == 1)
+            {
+                Result = matches[0].QueueNumber;
+            }
+            else if (matches.Count > 1)
+            {
+                var parameters = new DialogParameters { ["Entries"] = matches };
+                var dialog = DialogService.Show<ChooseDateDialog>("Выберите дату", parameters);
+                var res = await dialog.Result;
+                if (!res.Canceled && res.Data is ReestrEntry entry)
+                {
+                    Result = entry.QueueNumber;
+                }
+            }
+        }
+        else
+        {
+            var match = ExcelService.FindByOrderAndMfc(OrderNumber, MfcNumber);
+            if (match != null)
+                Result = match.QueueNumber;
+        }
+    }
+}

@@ -1,10 +1,31 @@
 using reestr.Components;
+using MudBlazor.Services;
+using reestr.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+builder.Services.AddMudServices();
+builder.Services.AddSingleton<ExcelDataService>(sp =>
+{
+    var env = sp.GetRequiredService<IWebHostEnvironment>();
+    var service = new ExcelDataService();
+    var file = Path.Combine(env.WebRootPath, "data.xlsx");
+    if (File.Exists(file))
+    {
+        try
+        {
+            service.LoadFromFile(file);
+        }
+        catch (Exception ex)
+        {
+            sp.GetRequiredService<ILogger<Program>>().LogWarning(ex, "Failed to load Excel data");
+        }
+    }
+    return service;
+});
 
 var app = builder.Build();
 
