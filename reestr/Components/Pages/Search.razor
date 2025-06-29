@@ -39,7 +39,7 @@
             else if (matches.Count > 1)
             {
                 var parameters = new DialogParameters { ["Entries"] = matches };
-                var dialog = DialogService.Show<ChooseDateDialog>("Выберите дату", parameters);
+                var dialog = await DialogService.ShowAsync<ChooseDateDialog>("Выберите дату", parameters);
                 var res = await dialog.Result;
                 if (!res.Canceled && res.Data is ReestrEntry entry)
                 {

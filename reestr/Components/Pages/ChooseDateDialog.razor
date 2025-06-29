@@ -1,13 +1,15 @@
 @using reestr.Services
-@inject MudDialogInstance MudDialog
 @code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; } = null!;
+
     [Parameter] public List<ReestrEntry> Entries { get; set; } = new();
+
     private void Select(ReestrEntry entry) => MudDialog.Close(DialogResult.Ok(entry));
 }
 
 <MudDialog>
-    <MudDialogTitle>Выберите дату</MudDialogTitle>
-    <MudDialogContent>
+    <DialogContent>
         <MudList T="ReestrEntry">
             @foreach (var item in Entries)
             {
@@ -16,5 +18,5 @@
                 </MudListItem>
             }
         </MudList>
-    </MudDialogContent>
+    </DialogContent>
 </MudDialog>
