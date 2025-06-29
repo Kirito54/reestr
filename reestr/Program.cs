@@ -2,7 +2,11 @@ using reestr.Components;
 using MudBlazor.Services;
 using reestr.Services;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+{
+    ContentRootPath = AppContext.BaseDirectory,
+    Args = args
+});
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
